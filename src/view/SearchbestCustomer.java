@@ -27,21 +27,32 @@ public class SearchbestCustomer extends javax.swing.JFrame {
         loadTable();
     }
 
- public void loadTable(){
-       try {            
-            LinkedList linkedList = burgerController.getAllBurgers(2);
-            DefaultTableModel dtm = (DefaultTableModel) tableBestCustomer.getModel();
-            dtm.setRowCount(0);
-            for (int i = 0; i < linkedList.size(); i++) {
-                Burger burger = linkedList.get(i);
-                Object[] rowData = {burger.getOrderID(),burger.getOrderID(),burger.getCustomerName(), burger.getQty(), burger.getQty() * 500};
-                dtm.addRow(rowData);
+   public void loadTable() {
+    try {
+        Burger[] burgersArray = burgerController.sort();
+
+        DefaultTableModel model = (DefaultTableModel) tableBestCustomer.getModel();
+        model.setRowCount(0); // clear old data
+
+        for (Burger b : burgersArray) {
+            if (b.getStatus() == 0 || b.getStatus() == 1) {
+                Object[] row = {
+                    b.getOrderID(),
+                    b.getCustomerID(),
+                    b.getQty(),
+                    b.getQty() * 500
+                };
+                model.addRow(row);
             }
-
-        } catch (IOException ex) {
-
         }
+
+        tableBestCustomer.setModel(model);
+
+    } catch (IOException ex) {
+        ex.printStackTrace();
     }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.

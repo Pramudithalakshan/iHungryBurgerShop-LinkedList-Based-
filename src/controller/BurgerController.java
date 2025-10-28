@@ -105,7 +105,7 @@ public class BurgerController {
         while (input.hasNext()) {
             String line = input.nextLine();
             String[] rowData = line.split(",");
-            if (Integer.parseInt(rowData[4])==(status)) {
+            if (Integer.parseInt(rowData[4]) == (status)) {
                 linkedList.add(new Burger(rowData[0], rowData[1], rowData[2], Integer.parseInt(rowData[3]), Integer.parseInt(rowData[4])));
             }
         }
@@ -125,19 +125,27 @@ public class BurgerController {
         }
         return null;
     }
-    
-    public LinkedList sort(String customerId) throws FileNotFoundException {
+
+    public Burger[] sort() throws FileNotFoundException {
         Scanner input = new Scanner(new File("burger.txt"));
         LinkedList linkedList = new LinkedList();
         while (input.hasNext()) {
             String line = input.nextLine();
             String[] rowData = line.split(",");
-            if (rowData[1].equals(customerId)) {
-                linkedList.add(new Burger(rowData[0], Integer.parseInt(rowData[3])));
-                return linkedList;
+            Burger b = new Burger(rowData[0], rowData[1], rowData[2], Integer.parseInt(rowData[3]), Integer.parseInt(rowData[4]));
+            linkedList.add(b);
+        }
+       Burger[] burgersArray = linkedList.toArray();
+        for (int i = 0; i < burgersArray.length - 1; i++) {
+            for (int j = 0; j < burgersArray.length - i - 1; j++) {
+                if (burgersArray[j].getQty() < burgersArray[j + 1].getQty()) {
+                    Burger temp = burgersArray[j];
+                    burgersArray[j] = burgersArray[j + 1];
+                    burgersArray[j + 1] = temp;
+                }
             }
         }
-        return null;
+        return burgersArray;
     }
 
 }
