@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -96,6 +98,14 @@ public class UpdateOrder extends javax.swing.JFrame {
         txtOrderId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtOrderIdActionPerformed(evt);
+            }
+        });
+        txtOrderId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtOrderIdKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtOrderIdKeyReleased(evt);
             }
         });
 
@@ -208,53 +218,30 @@ public class UpdateOrder extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        int status =statusComboBox.getSelectedIndex();
-//        if (txtOrderId.getText().equals("") || txtQty.getText().equals("") || txtCustomerId.getText().equals("")) {
-//            JOptionPane.showMessageDialog(this, "Fill the required fields first");
-//        } else {
-//            if (status == 1 || status == 2) {
-//                lblError.setText("You can not update cancelled or delivered orders");
-//            } else {
-//                int newStatus = (statusComboBox.getSelectedIndex() == 0) ? 0
-//                        : (statusComboBox.getSelectedIndex() == 1) ? 1
-//                        : 2;
-//                String orId = txtOrderId.getText();
-//                String orderId = txtOrderId.getText();
-//                if (orderId.equals("null")) {
-//                    JOptionPane.showMessageDialog(this, "No customer Id found.");
-//                } else {
-//                    String customerId = txtCustomerId.getText();
-//                    int qty = Integer.parseInt(txtQty.getText());
-//                    lblTotal.setText(qty * UNITE_PRICE + "");
-//                    String name = txtCustomerName.getText();
-//
-//                    Burger order = new Burger(orderId, customerId, name, qty, newStatus);
-//                    boolean isUpdate = burgerController.updateOrder(order);
-//                    if (isUpdate) {
-//                        JOptionPane.showMessageDialog(this, "Updated.");
-//                        try {
-//                            String cusId = txtCustomerId.getText();
-//                            String oId = txtOrderId.getText();
-//                            String customerName = txtCustomerName.getText();
-//                            int q = Integer.parseInt(txtQty.getText());
-//                            Burger burger = new Burger(orderId, customerId, customerName, qty, PREPEARING);
-//                            LinkedList linkedList = new LinkedList();
-//                            linkedList.addLast(burger);
-//                            linkedList.generateOrderID();
-//                            FileWriter fw = new FileWriter("burger.txt");
-//                            fw.write(oId + "," + cusId + "," + customerName + "," + q + "," + statusComboBox.getSelectedIndex() + "\n");
-//                            fw.close();
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    } else {
-//                        JOptionPane.showMessageDialog(this, "Update Fail.");
-//                    }
-//
-//                }
-//
-//            }
-//        }
+ 
+        if (txtOrderId.getText().equals("") || txtQty.getText().equals("") || txtCustomerId.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Fill the required fields first");
+        } else {
+                    String orderId = txtOrderId.getText();
+                    String customerId = txtCustomerId.getText();
+                    int qty = Integer.parseInt(txtQty.getText());
+                    lblTotal.setText(qty * UNITE_PRICE + "");
+                    String name = txtCustomerName.getText();
+                    int newStatus = statusComboBox.getSelectedIndex();
+                    Burger order = new Burger(orderId, customerId, name, qty, newStatus);
+                    boolean isUpdate = burgerController.updateOrder(order);
+                    if (isUpdate) {
+                    try {
+                        JOptionPane.showMessageDialog(this, "Updated.");
+                        burgerController.generateOrderID();
+                    } catch (IOException ex) {
+                        Logger.getLogger(UpdateOrder.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Update Fail.");
+                    }
+
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -262,25 +249,34 @@ public class UpdateOrder extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtOrderIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOrderIdActionPerformed
-           
+                  
         try {
             String orId = txtOrderId.getText();
             Burger burger = burgerController.searchOrder(orId);
-            if (burger == null) {
-                JOptionPane.showMessageDialog(this, "Order not found..");
-            } else {
+           if(burger==null){
+           JOptionPane.showMessageDialog(this, "Order not found");
+           }else{
                 txtCustomerId.setText(burger.getCustomerID());
                 txtOrderId.setText(burger.getOrderID());
+                txtCustomerName.setText(burger.getCustomerName());
                 txtQty.setText(burger.getQty() + "");
                 lblTotal.setText(burger.getQty() * UNITE_PRICE + "");
                 int status;
                 statusComboBox.setSelectedIndex(burger.getStatus());
                 txtOrderId.setEditable(false);
-            }
+           }
         } catch (IOException ex) {
             Logger.getLogger(UpdateOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_txtOrderIdActionPerformed
+
+    private void txtOrderIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtOrderIdKeyPressed
+      
+    }//GEN-LAST:event_txtOrderIdKeyPressed
+
+    private void txtOrderIdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtOrderIdKeyReleased
+       
+    }//GEN-LAST:event_txtOrderIdKeyReleased
 
     /**
      * @param args the command line arguments

@@ -8,8 +8,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import model.Burger;
 
@@ -20,9 +23,8 @@ import model.Burger;
 public class BurgerController {
 
     public String generateOrderID() throws IOException {
-        File file = new File("burger.txt");
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        BufferedReader br = new BufferedReader(new FileReader("burger.txt"));
         String line;
         String lastLine = null;
         while ((line = br.readLine()) != null) {
@@ -96,9 +98,26 @@ public class BurgerController {
 //        }
 //        return null;
 //    }
-//   public boolean updateOrder(Burger burger){
-//   
-//   }
+    public boolean updateOrder(Burger burger) {
+        try {
+            Scanner input = new Scanner(new File("burger.txt"));
+            LinkedList linkedList = new LinkedList();
+            while (input.hasNext()) {                
+                String line = input.nextLine();
+                String[] rowData = line.split(",");
+                linkedList.add(new Burger(rowData[0],rowData[1],rowData[2],Integer.parseInt(rowData[3]),Integer.parseInt(rowData[4])));
+            }
+            input.close();
+            boolean isUpdate = linkedList.set(burger);
+            FileWriter fw = new FileWriter("burger.txt");
+            fw.write(burger.getOrderID() + "," + burger.getCustomerID() + "," + burger.getCustomerName() + "," + burger.getQty() + "," + burger.getStatus() + "\n");
+            fw.close();
+        } catch (IOException ex) {
+           
+        }
+        return false;
+    }
+
     public static LinkedList getAllBurgers(int status) throws FileNotFoundException {
         Scanner input = new Scanner(new File("burger.txt"));
         LinkedList linkedList = new LinkedList();
@@ -135,7 +154,7 @@ public class BurgerController {
             Burger b = new Burger(rowData[0], rowData[1], rowData[2], Integer.parseInt(rowData[3]), Integer.parseInt(rowData[4]));
             linkedList.add(b);
         }
-       Burger[] burgersArray = linkedList.toArray();
+        Burger[] burgersArray = linkedList.toArray();
         for (int i = 0; i < burgersArray.length - 1; i++) {
             for (int j = 0; j < burgersArray.length - i - 1; j++) {
                 if (burgersArray[j].getQty() < burgersArray[j + 1].getQty()) {

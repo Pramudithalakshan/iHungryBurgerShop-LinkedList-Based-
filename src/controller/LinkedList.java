@@ -100,7 +100,7 @@ public class LinkedList {
         int index = 0;
         Node temp = first;
         while (temp != null) {
-            if (burger.equals(temp.burger)) {
+            if (temp.burger.equals(burger)) {
                 return index;
             }
             index++;
@@ -121,7 +121,21 @@ public class LinkedList {
         }
         return null;
     }
-
+    public boolean set(Burger burger) {
+        int index = indexOf(burger);
+        if (index >= 0 && index < size()) {
+            int count = 0;
+            Node temp = first;
+            while (count < index) {
+                count++;
+                temp = temp.next;
+            }
+            temp.burger=burger;
+            return true;
+        }
+        return false;
+    }
+    
     public boolean contains(Burger burger) {
         return indexOf(burger) != -1;
     }
@@ -144,10 +158,5 @@ public class LinkedList {
     public void clear() {
         first = null;
     }
-
-    
-
-
-    
-//   public boolean updateOrder(Burger burger){}
+ 
 }

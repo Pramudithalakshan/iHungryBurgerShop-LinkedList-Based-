@@ -92,4 +92,8 @@ public class Burger {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
+    
+    public boolean equals(Burger burger){
+    return burger.orderID.equals(this.orderID);
+    }
 }
