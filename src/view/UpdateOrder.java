@@ -218,28 +218,28 @@ public class UpdateOrder extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- 
+
         if (txtOrderId.getText().equals("") || txtQty.getText().equals("") || txtCustomerId.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Fill the required fields first");
         } else {
-                    String orderId = txtOrderId.getText();
-                    String customerId = txtCustomerId.getText();
-                    int qty = Integer.parseInt(txtQty.getText());
-                    lblTotal.setText(qty * UNITE_PRICE + "");
-                    String name = txtCustomerName.getText();
-                    int newStatus = statusComboBox.getSelectedIndex();
-                    Burger order = new Burger(orderId, customerId, name, qty, newStatus);
-                    boolean isUpdate = burgerController.updateOrder(order);
-                    if (isUpdate) {
-                    try {
+            try {
+                String orderId = txtOrderId.getText();
+                String customerId = txtCustomerId.getText();
+                int qty = Integer.parseInt(txtQty.getText());
+                lblTotal.setText(qty * UNITE_PRICE + "");
+                String name = txtCustomerName.getText();
+                int newStatus = statusComboBox.getSelectedIndex();
+                Burger order = new Burger(orderId, customerId, name, qty, newStatus);
+                boolean isUpdate = burgerController.updateOrder(order);
+                if (isUpdate) {                 
                         JOptionPane.showMessageDialog(this, "Updated.");
-                        burgerController.generateOrderID();
-                    } catch (IOException ex) {
-                        Logger.getLogger(UpdateOrder.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Update Fail.");
-                    }
+                        burgerController.generateOrderID();                   
+                } else {
+                    JOptionPane.showMessageDialog(this, "Update Fail.");
+                }
+            } catch (IOException ex) {
+ 
+            }
 
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -249,33 +249,33 @@ public class UpdateOrder extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtOrderIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOrderIdActionPerformed
-                  
         try {
             String orId = txtOrderId.getText();
             Burger burger = burgerController.searchOrder(orId);
-           if(burger==null){
-           JOptionPane.showMessageDialog(this, "Order not found");
-           }else{
+            if (burger == null) {
+                JOptionPane.showMessageDialog(this, "Order not found");
+            } else {
                 txtCustomerId.setText(burger.getCustomerID());
                 txtOrderId.setText(burger.getOrderID());
                 txtCustomerName.setText(burger.getCustomerName());
+                System.out.println(burger.getCustomerName());
                 txtQty.setText(burger.getQty() + "");
                 lblTotal.setText(burger.getQty() * UNITE_PRICE + "");
                 int status;
                 statusComboBox.setSelectedIndex(burger.getStatus());
                 txtOrderId.setEditable(false);
-           }
+            }
         } catch (IOException ex) {
             Logger.getLogger(UpdateOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_txtOrderIdActionPerformed
 
     private void txtOrderIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtOrderIdKeyPressed
-      
+
     }//GEN-LAST:event_txtOrderIdKeyPressed
 
     private void txtOrderIdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtOrderIdKeyReleased
-       
+
     }//GEN-LAST:event_txtOrderIdKeyReleased
 
     /**

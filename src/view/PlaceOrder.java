@@ -253,7 +253,7 @@ class PlaceOrder extends javax.swing.JFrame {
                 String orderId = lblOrderId.getText();
                 String customerName = txtCustomerName.getText();
                 int qty = Integer.parseInt(txtQty.getText());
-                Burger burger = new Burger(orderId, customerId, customerName, qty, PREPEARING);
+                 
  
                 burgerController.generateOrderID() ;
                 FileWriter fw = new FileWriter("burger.txt", true);

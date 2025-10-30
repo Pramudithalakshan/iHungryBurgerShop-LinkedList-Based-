@@ -100,7 +100,7 @@ public class LinkedList {
         int index = 0;
         Node temp = first;
         while (temp != null) {
-            if (temp.burger.equals(burger)) {
+            if (temp.burger.getOrderID().equals(burger.getOrderID())) {
                 return index;
             }
             index++;
@@ -158,5 +158,7 @@ public class LinkedList {
     public void clear() {
         first = null;
     }
+    
+    
  
 }

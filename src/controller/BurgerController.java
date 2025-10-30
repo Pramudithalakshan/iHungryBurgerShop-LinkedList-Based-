@@ -37,9 +37,7 @@ public class BurgerController {
         }
         String[] parts = lastLine.split(",");
         String lastId = parts[0];
-
-        int nextNumber = Integer.parseInt(lastId.substring(1)) + 1;
-        return String.format("B%04d", nextNumber);
+        return String.format("B%04d", Integer.parseInt(lastId.substring(1)) + 1);
 
     }
 
@@ -83,39 +81,35 @@ public class BurgerController {
         return burger;
     }
 
-//    public DefaultTableModel loadCustomerTable(Burger customer) {
-//        for (int i = 0; i < customer.length; i++) {
-//            String[] columns = {"Order ID", "order Qty", "Total"};
-//            DefaultTableModel model = new DefaultTableModel(columns, 0);
-//
-//            for (Burger c : customerArray) {
-//                Object[] row = {c.getOrderID(), c.getQty(), c.getQty() * UNITE_PRICE};
-//                model.addRow(row);
-//            }
-//
-//            return model;
-//
-//        }
-//        return null;
-//    }
-    public boolean updateOrder(Burger burger) {
-        try {
-            Scanner input = new Scanner(new File("burger.txt"));
-            LinkedList linkedList = new LinkedList();
-            while (input.hasNext()) {                
-                String line = input.nextLine();
-                String[] rowData = line.split(",");
-                linkedList.add(new Burger(rowData[0],rowData[1],rowData[2],Integer.parseInt(rowData[3]),Integer.parseInt(rowData[4])));
+    public boolean updateOrder(Burger burger) throws IOException {
+        Scanner input = new Scanner(new FileReader("burger.txt"));
+        LinkedList linkedList = new LinkedList();
+        int count = 0;
+        while (input.hasNext()) {
+            String line = input.nextLine();
+            String[] rowData = line.split(",");
+            Burger b = new Burger(rowData[0], rowData[1], rowData[2], Integer.parseInt(rowData[3]), Integer.parseInt(rowData[4]));
+            linkedList.add(b);
+            if (linkedList.get(count).getOrderID().equalsIgnoreCase(burger.getOrderID())) {
+                if (linkedList.get(count).getStatus() == 1 || linkedList.get(count).getStatus() == 2) {
+                    return false;
+                }
             }
-            input.close();
-            boolean isUpdate = linkedList.set(burger);
-            FileWriter fw = new FileWriter("burger.txt");
-            fw.write(burger.getOrderID() + "," + burger.getCustomerID() + "," + burger.getCustomerName() + "," + burger.getQty() + "," + burger.getStatus() + "\n");
-            fw.close();
-        } catch (IOException ex) {
-           
+
+            count++;
         }
-        return false;
+        input.close();
+        boolean isUpdate = linkedList.set(burger);
+        File f = new File("burger.txt");
+        boolean isDelete = f.delete();
+        if (isDelete) {
+            for (int i = 0; i < linkedList.size(); i++) {
+                FileWriter fw = new FileWriter("burger.txt", true);
+                fw.write(linkedList.get(i).getOrderID() + "," + linkedList.get(i).getCustomerID() + "," + linkedList.get(i).getCustomerName() + "," + linkedList.get(i).getQty() + "," + linkedList.get(i).getStatus() + "\n");
+                fw.close();
+            }
+        }
+        return true;
     }
 
     public static LinkedList getAllBurgers(int status) throws FileNotFoundException {
